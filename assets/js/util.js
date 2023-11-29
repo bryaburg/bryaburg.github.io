@@ -94,11 +94,30 @@
 
 			}, userConfig);
 
-			// Expand "target" if it's not a jQuery object already.
-				if (typeof config.target != 'jQuery')
-					config.target = $(config.target);
-
-		// Panel.
+			// Ensure that "target" is a valid element or a safe selector before converting it to a jQuery object
+			if (config.target) {
+				// Check if "target" is already a jQuery object
+				if (!(config.target instanceof jQuery)) {
+					// Check if "target" is a string (selector) or a DOM element
+					if (typeof config.target === 'string' || config.target instanceof Element) {
+						// Convert "target" to a jQuery object
+						config.target = $(config.target);
+					} else {
+						// If "target" is neither a string nor a DOM element, handle the error or assign a default
+						console.error('Invalid target for the jQuery plugin.');
+						// Optionally, set a default target or handle the error as appropriate
+						// config.target = $(defaultTarget); // Set a default target if necessary
+						return; // Or exit the function/plugin
+					}
+				}
+			} else {
+				// Handle the case where "target" is not provided
+				console.error('No target specified for the jQuery plugin.');
+				// Optionally, set a default target or handle the error as appropriate
+				// config.target = $(defaultTarget); // Set a default target if necessary
+				return; // Or exit the function/plugin
+			}
+						// Panel.
 
 			// Methods.
 				$this._hide = function(event) {
